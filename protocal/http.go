@@ -1,9 +1,12 @@
 package protocal
 
 import (
-	"aofiee/hugeman/configs"
-	"aofiee/hugeman/pkg/database_driver/gorm"
 	"flag"
+	"hugeman/configs"
+	"hugeman/internal/handlers"
+	"hugeman/internal/repositories"
+	"hugeman/internal/services"
+	"hugeman/pkg/database_driver/gorm"
 	"log"
 	"os"
 	"os/signal"
@@ -49,6 +52,11 @@ func ServeHTTP() error {
 			}
 		}
 	}()
+
+	postgresRepo := repositories.NewPostgres(dbConGorm.Postgres)
+	srv := services.New(postgresRepo)
+	hdl := handlers.New(srv, dbConGorm.Postgres)
+	app.Get("/healthz", hdl.HealthCheck)
 
 	err = app.Listen(":" + configs.GetViper().App.Port)
 	if err != nil {

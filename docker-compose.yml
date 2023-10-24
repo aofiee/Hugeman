@@ -15,7 +15,7 @@ services:
         networks:
         - hm-people
     database:
-        container_name: hm-database
+        container_name: database
         image: postgres:14.1-alpine
         restart: always
         environment:
@@ -25,6 +25,8 @@ services:
             - "5432:5432"
         volumes:
             - "./db:/var/lib/postgresql/data"
+        networks:
+        - hm-people
 networks:
   hm-people:
     driver: bridge
