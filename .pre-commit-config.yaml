@@ -1,0 +1,56 @@
+repos:
+- repo: local
+  hooks:
+  - id: go-sec
+    name: go security check
+    entry: gosec ./...
+    language: system
+    pass_filenames: false
+    # files: .*\.go
+    files: ^cmd/api/.*\.go$
+
+- repo: https://github.com/dnephin/pre-commit-golang
+  rev: v0.5.1
+  hooks:
+    - id: go-fmt
+    # - id: go-vet
+    - id: go-lint
+    - id: go-imports
+    - id: go-cyclo
+    - id: validate-toml
+    - id: no-go-testing
+    - id: golangci-lint
+    - id: go-critic
+    - id: go-unit-tests
+    - id: go-build
+    - id: go-mod-tidy
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+  - id: trailing-whitespace
+  - id: check-yaml
+  - id: check-merge-conflict
+  - id: end-of-file-fixer
+    files: cmd/
+
+- repo: local
+  hooks:
+  - id: dependency-check
+    name: OWASP Dependency Check
+    entry: dependency-check --out cmd/ --scan cmd/ --project $(basename $PWD)/cmd --enableExperimental --failOnCVSS 0 --suppression cmd/dependency-suppressions.xml
+    pass_filenames: false
+    language: system
+    files: .*\.mod$
+
+- repo: https://github.com/commitizen-tools/commitizen
+  rev: v2.42.1
+  hooks:
+    - id: commitizen
+      stages: [commit-msg]
+
+- repo: https://github.com/milin/giticket
+  rev: v1.4
+  hooks:
+  - id:  giticket
+    args: ['--regex=[A-Z]{2,4}-[0-9]+', '--format={ticket} {commit_msg}', '--mode=regex_match']
