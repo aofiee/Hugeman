@@ -1,0 +1,30 @@
+version: "3"
+services:
+    app:
+        container_name: HM-People
+        build:
+            context: .
+            dockerfile: ./build/Dockerfile.local
+        volumes:
+            - ./:/app/
+        working_dir: /app
+        env_file:
+            - .env
+        ports:
+            - "${APP_PORT}:${APP_PORT}"
+        networks:
+        - hm-people
+    database:
+        container_name: hm-database
+        image: postgres:14.1-alpine
+        restart: always
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=g60v+aDYCs7M+atVL+cufg==
+        ports:
+            - "5432:5432"
+        volumes:
+            - "./db:/var/lib/postgresql/data"
+networks:
+  hm-people:
+    driver: bridge

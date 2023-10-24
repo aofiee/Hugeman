@@ -1,0 +1,33 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+.vscode
+
+.env.*
+# *.local
+
+/cert
+/data/db
+/deployment
+
+copy.sh
+configs/local-config.yaml
+.env
+.DS_Store
+tmp/app/engine
+/tmp/app/engine
+cmd/dependency-check-report.html
+cmd/dependency-suppressions.xml
+db/
