@@ -2,6 +2,9 @@ package domain
 
 import (
 	"net/http"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -36,3 +39,27 @@ type Status struct {
 	Code    int      `json:"code,omitempty"`
 	Message []string `json:"message,omitempty"`
 }
+
+type (
+	// TodoResponse struct
+	TodoResponse struct {
+		ID          *uuid.UUID  `json:"id,omitempty" mapstructure:"id"`
+		Title       *string     `json:"title,omitempty" mapstructure:"title"`
+		Description *string     `json:"description,omitempty" mapstructure:"description"`
+		Date        *time.Time  `json:"date,omitempty" mapstructure:"date"`
+		Image       *string     `json:"image,omitempty" mapstructure:"image"`
+		Status      *TodoStatus `json:"status,omitempty" mapstructure:"status"`
+		CreatedAt   *time.Time  `json:"created_at,omitempty" mapstructure:"created_at"`
+		UpdatedAt   *time.Time  `json:"updated_at,omitempty" mapstructure:"updated_at"`
+		DeletedAt   *time.Time  `json:"deleted_at,omitempty" mapstructure:"deleted_at"`
+	}
+
+	// TodoListResponse struct
+	TodoListResponse struct {
+		Todos []TodoResponse `json:"todos,omitempty" mapstructure:"todos"`
+
+		CurrentPage *int   `json:"current_page,omitempty" mapstructure:"current_page"`
+		PerPage     *int   `json:"per_page,omitempty" mapstructure:"per_page"`
+		TotalItem   *int64 `json:"total_item,omitempty" mapstructure:"total_item"`
+	}
+)

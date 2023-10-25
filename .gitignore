@@ -31,3 +31,4 @@ tmp/app/engine
 cmd/dependency-check-report.html
 cmd/dependency-suppressions.xml
 db/
+tmp/build-errors.log
