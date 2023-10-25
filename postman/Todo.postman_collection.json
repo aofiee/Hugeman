@@ -1,0 +1,218 @@
+{
+	"info": {
+		"_postman_id": "85ba5f1c-44de-471e-956d-1eadcdfc281d",
+		"name": "Todo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1654411",
+		"_collection_link": "https://speeding-desert-719556.postman.co/workspace/Tridept~cd44b062-62a7-47ee-a182-306c9fba7853/collection/1654411-85ba5f1c-44de-471e-956d-1eadcdfc281d?action=share&source=collection_link&creator=1654411"
+	},
+	"item": [
+		{
+			"name": "CreateTodo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"world\",\n    \"description\": \"golang\",\n    \"date\": \"2023-10-25T19:46:05Z\",\n    \"image\": \"https://scontent.fbkk8-3.fna.fbcdn.net/v/t39.30808-6/393759110_798549782070028_522951429028478775_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFvsI6YA_c4FeHdRi0zW2W48XPmwMFG_Uzxc-bAwUb9TFcrLmmmIIpAKPybpTBsiRJIZYoAmbkGGhw6ZdiDCDXb&_nc_ohc=CHQsmIugG-0AX8fQ--x&_nc_ht=scontent.fbkk8-3.fna&oh=00_AfBgFL0IgF2CLk-U3XUmqJ27Kswkfd1xWbilcRhBrjl9PQ&oe=653DF20F\",\n    \"status\": \"COMPLETE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endpoint}}/v1/api/todo",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"v1",
+						"api",
+						"todo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Todo",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"468a0744-5cf8-42cd-9331-cd250a53d672\",\n    \"title\": \"hello3\",\n    \"description\": \"hi2\",\n    \"date\": \"2023-10-25T20:20:05Z\",\n    \"image\": \"https://scontent.fbkk8-3.fna.fbcdn.net/v/t39.30808-6/393759110_798549782070028_522951429028478775_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFvsI6YA_c4FeHdRi0zW2W48XPmwMFG_Uzxc-bAwUb9TFcrLmmmIIpAKPybpTBsiRJIZYoAmbkGGhw6ZdiDCDXb&_nc_ohc=CHQsmIugG-0AX8fQ--x&_nc_ht=scontent.fbkk8-3.fna&oh=00_AfBgFL0IgF2CLk-U3XUmqJ27Kswkfd1xWbilcRhBrjl9PQ&oe=653DF20F\",\n    \"status\": \"IN_PROGRESS\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endpoint}}/v1/api/todo",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"v1",
+						"api",
+						"todo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Todo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endpoint}}/v1/api/todo/f952a8e6-098d-4820-91c3-74388c70093e",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"v1",
+						"api",
+						"todo",
+						"f952a8e6-098d-4820-91c3-74388c70093e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Todo By ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endpoint}}/v1/api/todo/05b3f472-b71a-48c9-ac2a-9939d1071879",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"v1",
+						"api",
+						"todo",
+						"05b3f472-b71a-48c9-ac2a-9939d1071879"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Todo By Params",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endpoint}}/v1/api/todo?limit=10&page=1&asc=false&order_by=created_at&status=COMPLETE",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"v1",
+						"api",
+						"todo"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "id",
+							"value": "c12ede95-c5ff-459b-b1e2-5815fda336b3",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "title",
+							"value": "he",
+							"disabled": true
+						},
+						{
+							"key": "asc",
+							"value": "false"
+						},
+						{
+							"key": "order_by",
+							"value": "created_at"
+						},
+						{
+							"key": "status",
+							"value": "COMPLETE"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "endpoint",
+			"value": "http://localhost:9089",
+			"type": "string"
+		}
+	]
+}
