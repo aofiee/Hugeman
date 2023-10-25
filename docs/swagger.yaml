@@ -1,0 +1,157 @@
+basePath: /
+definitions:
+  domain.TodoRequest:
+    properties:
+      date:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      image:
+        type: string
+      status:
+        enum:
+        - IN_PROGRESS
+        - COMPLETE
+        type: string
+      title:
+        maxLength: 100
+        type: string
+    required:
+    - date
+    - status
+    - title
+    type: object
+host: localhost:9089
+info:
+  contact:
+    email: aofiee@aofiee.dev
+    name: API Support
+    url: https://www.aofiee.dev/
+  description: This is a sample server server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://www.aofiee.dev/
+  title: APIs
+  version: "1.0"
+paths:
+  /v1/api/todo:
+    get:
+      consumes:
+      - application/json
+      description: Delete todo
+      parameters:
+      - description: uuid
+        in: query
+        name: id
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: order_by
+        in: query
+        name: orderBy
+        type: string
+      - description: asc
+        in: query
+        name: asc
+        type: boolean
+      - description: title
+        in: query
+        name: title
+        type: string
+      - description: description
+        in: query
+        name: description
+        type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete todo
+      tags:
+      - TODO
+    post:
+      consumes:
+      - application/json
+      description: Create todo
+      parameters:
+      - description: CreateTodo
+        in: body
+        name: CreateTodo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.TodoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create todo
+      tags:
+      - TODO
+    put:
+      consumes:
+      - application/json
+      description: Update todo
+      parameters:
+      - description: UpdateTodo
+        in: body
+        name: UpdateTodo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.TodoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update todo
+      tags:
+      - TODO
+  /v1/api/todo/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete todo
+      parameters:
+      - description: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete todo
+      tags:
+      - TODO
+schemes:
+- http
+swagger: "2.0"
