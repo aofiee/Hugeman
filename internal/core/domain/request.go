@@ -5,7 +5,7 @@ import "github.com/google/uuid"
 type (
 	// TodoRequest struct
 	TodoRequest struct {
-		ID          *uuid.UUID  `json:"id" validate:"omitempty,uuid4" form:"id" query:"id"`
+		ID          *uuid.UUID  `json:"id" validate:"omitempty" form:"id" query:"id"`
 		Title       *string     `json:"title" validate:"required,max=100" form:"title" query:"title"`
 		Description *string     `json:"description" validate:"omitempty" form:"description" query:"description"`
 		Date        *string     `json:"date" validate:"required" form:"date" query:"date"`

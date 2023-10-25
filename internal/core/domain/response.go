@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 var (
@@ -43,15 +44,15 @@ type Status struct {
 type (
 	// TodoResponse struct
 	TodoResponse struct {
-		ID          *uuid.UUID  `json:"id,omitempty" mapstructure:"id"`
-		Title       *string     `json:"title,omitempty" mapstructure:"title"`
-		Description *string     `json:"description,omitempty" mapstructure:"description"`
-		Date        *string     `json:"date,omitempty" mapstructure:"date"`
-		Image       *string     `json:"image,omitempty" mapstructure:"image"`
-		Status      *TodoStatus `json:"status,omitempty" mapstructure:"status"`
-		CreatedAt   *time.Time  `json:"created_at,omitempty" mapstructure:"created_at"`
-		UpdatedAt   *time.Time  `json:"updated_at,omitempty" mapstructure:"updated_at"`
-		DeletedAt   *time.Time  `json:"deleted_at,omitempty" mapstructure:"deleted_at"`
+		ID          *uuid.UUID      `json:"id,omitempty" mapstructure:"id"`
+		Title       *string         `json:"title,omitempty" mapstructure:"title"`
+		Description *string         `json:"description,omitempty" mapstructure:"description"`
+		Date        *string         `json:"date,omitempty" mapstructure:"date"`
+		Image       *string         `json:"image,omitempty" mapstructure:"image"`
+		Status      *TodoStatus     `json:"status,omitempty" mapstructure:"status"`
+		CreatedAt   *time.Time      `json:"created_at,omitempty" mapstructure:"created_at"`
+		UpdatedAt   *time.Time      `json:"updated_at,omitempty" mapstructure:"updated_at"`
+		DeletedAt   *gorm.DeletedAt `json:"deleted_at,omitempty" mapstructure:"deleted_at"`
 	}
 
 	// TodoListResponse struct

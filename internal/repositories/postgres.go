@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"encoding/base64"
+	"errors"
 	"hugeman/internal/core/domain"
 	"time"
 
@@ -63,13 +64,100 @@ func (p *Postgres) CreateTodo(request domain.TodoRequest) (*domain.TodoResponse,
 		Date:        &df,
 		Image:       todo.Image,
 		Status:      todo.Status,
+		CreatedAt:   todo.CreatedAt,
+		UpdatedAt:   todo.UpdatedAt,
+		DeletedAt:   todo.DeletedAt,
 	}
 	return &response, nil
 }
 
 // UpdateTodo func
 func (p *Postgres) UpdateTodo(request domain.TodoRequest) (*domain.TodoResponse, error) {
-	return nil, nil
+	var (
+		todo          domain.Todo
+		response      domain.TodoResponse
+		decodingImage string
+		df            string
+	)
+	payload := domain.QueryTodoRequest{
+		ID: request.ID,
+	}
+	condition := p.condition(payload)
+	columns := p.updateColumns(request)
+	tx := p.dbGorm.Begin()
+	defer func() {
+		tx.Rollback()
+	}()
+	tx.Table(todo.TableName()).Where(condition).Updates(columns)
+	if tx.Error != nil {
+		logrus.Errorln(tx.Error)
+		return &response, tx.Error
+	}
+	tx.Where(condition).First(&todo)
+	if tx.Error != nil {
+		logrus.Errorln(tx.Error)
+		return &response, tx.Error
+	}
+	tx.Commit()
+	if todo.ID == nil {
+		return &response, errors.New("data not found")
+	}
+	if todo.Image != nil {
+		dec, err := base64.StdEncoding.DecodeString(*todo.Image)
+		if err != nil {
+			logrus.Errorln(err)
+			return &response, err
+		}
+		decodingImage = string(dec)
+	}
+	if todo.Date != nil {
+		df = todo.Date.Format(layoutDateTimeRFC3339)
+	}
+	response = domain.TodoResponse{
+		ID:          todo.ID,
+		Title:       todo.Title,
+		Description: todo.Description,
+		Date:        &df,
+		Image:       &decodingImage,
+		Status:      todo.Status,
+		CreatedAt:   todo.CreatedAt,
+		UpdatedAt:   todo.UpdatedAt,
+		DeletedAt:   todo.DeletedAt,
+	}
+	return &response, nil
+}
+
+func (p *Postgres) condition(condition domain.QueryTodoRequest) map[string]interface{} {
+	expression := make(map[string]interface{})
+	if condition.ID != nil {
+		expression["id"] = *condition.ID
+	}
+	return expression
+}
+
+func (p *Postgres) updateColumns(request domain.TodoRequest) map[string]interface{} {
+	expression := make(map[string]interface{})
+	if request.Title != nil {
+		expression["title"] = *request.Title
+	}
+	if request.Description != nil {
+		expression["description"] = *request.Description
+	}
+	if request.Date != nil {
+		_date, err := time.Parse(layoutDateTimeRFC3339, *request.Date)
+		if err != nil {
+			logrus.Errorln(err)
+		}
+		expression["date"] = _date
+	}
+	if request.Image != nil {
+		encodingImage := base64.StdEncoding.EncodeToString([]byte(*request.Image))
+		expression["image"] = encodingImage
+	}
+	if request.Status != nil {
+		expression["status"] = *request.Status
+	}
+	return expression
 }
 
 // DeleteTodo func
