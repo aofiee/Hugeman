@@ -84,6 +84,9 @@ func (p *Postgres) UpdateTodo(request domain.TodoRequest) (*domain.TodoResponse,
 	}
 	condition := p.condition(payload)
 	columns := p.updateColumns(request)
+	if len(columns) == 0 {
+		return &response, errors.New("fields are not able to update")
+	}
 	tx := p.dbGorm.Begin()
 	defer func() {
 		tx.Rollback()
@@ -162,7 +165,53 @@ func (p *Postgres) updateColumns(request domain.TodoRequest) map[string]interfac
 
 // DeleteTodo func
 func (p *Postgres) DeleteTodo(request domain.TodoRequest) (*domain.TodoResponse, error) {
-	return nil, nil
+	var (
+		todo          domain.Todo
+		response      domain.TodoResponse
+		decodingImage string
+		df            string
+	)
+	payload := domain.QueryTodoRequest{
+		ID: request.ID,
+	}
+	condition := p.condition(payload)
+	if err := p.dbGorm.Table(todo.TableName()).Where(condition).First(&todo).Error; err != nil {
+		logrus.Errorln(err)
+		return &response, err
+	}
+	tx := p.dbGorm.Begin()
+	defer func() {
+		tx.Rollback()
+	}()
+	tx.Delete(&todo)
+	if tx.Error != nil {
+		logrus.Errorln(tx.Error)
+		return &response, tx.Error
+	}
+	tx.Commit()
+	if todo.Image != nil {
+		dec, err := base64.StdEncoding.DecodeString(*todo.Image)
+		if err != nil {
+			logrus.Errorln(err)
+			return &response, err
+		}
+		decodingImage = string(dec)
+	}
+	if todo.Date != nil {
+		df = todo.Date.Format(layoutDateTimeRFC3339)
+	}
+	response = domain.TodoResponse{
+		ID:          todo.ID,
+		Title:       todo.Title,
+		Description: todo.Description,
+		Date:        &df,
+		Image:       &decodingImage,
+		Status:      todo.Status,
+		CreatedAt:   todo.CreatedAt,
+		UpdatedAt:   todo.UpdatedAt,
+		DeletedAt:   todo.DeletedAt,
+	}
+	return &response, nil
 }
 
 // GetTodo func

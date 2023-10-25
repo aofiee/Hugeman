@@ -117,14 +117,6 @@ func (hdl *HTTPHandler) DeleteTodo(c *fiber.Ctx) error {
 	}
 
 	var request domain.TodoRequest
-	if err := c.BodyParser(&request); err != nil {
-		logrus.Errorln(err)
-		return c.Status(fiber.StatusBadRequest).JSON(domain.ResponseBody{Status: domain.BadRequest})
-	}
-	if err := hdl.validator.ValidateStruct(request); err != nil {
-		logrus.Errorln(err)
-		return c.Status(fiber.StatusBadRequest).JSON(domain.ResponseBody{Status: domain.BadRequest})
-	}
 	request.ID = &uid
 	response, err := hdl.srv.DeleteTodo(request)
 	if err != nil {
