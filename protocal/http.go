@@ -56,7 +56,16 @@ func ServeHTTP() error {
 	postgresRepo := repositories.NewPostgres(dbConGorm.Postgres)
 	srv := services.New(postgresRepo)
 	hdl := handlers.New(srv, dbConGorm.Postgres)
-	app.Get("/healthz", hdl.HealthCheck)
+	app.Get("/health", hdl.HealthCheck)
+
+	hugeman := app.Group("/v1/api")
+	{
+		hugeman.Post("/todo", hdl.CreateTodo)
+		hugeman.Put("/todo", hdl.UpdateTodo)
+		hugeman.Delete("/todo/:id", hdl.DeleteTodo)
+		hugeman.Get("/todo/:id", hdl.GetTodo)
+		hugeman.Get("/todo", hdl.GetTodo)
+	}
 
 	err = app.Listen(":" + configs.GetViper().App.Port)
 	if err != nil {

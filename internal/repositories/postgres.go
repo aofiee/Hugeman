@@ -24,3 +24,23 @@ func NewPostgres(dbGorm *gorm.DB) *Postgres {
 		dbGorm: dbGorm,
 	}
 }
+
+// CreateTodo func
+func (p *Postgres) CreateTodo(request domain.TodoRequest) (*domain.TodoResponse, error) {
+	return nil, nil
+}
+
+// UpdateTodo func
+func (p *Postgres) UpdateTodo(request domain.TodoRequest) (*domain.TodoResponse, error) {
+	return nil, nil
+}
+
+// DeleteTodo func
+func (p *Postgres) DeleteTodo(request domain.TodoRequest) (*domain.TodoResponse, error) {
+	return nil, nil
+}
+
+// GetTodo func
+func (p *Postgres) GetTodo(condition domain.QueryTodoRequest) (*domain.TodoListResponse, error) {
+	return nil, nil
+}

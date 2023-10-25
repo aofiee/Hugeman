@@ -42,3 +42,23 @@ func (hdl *HTTPHandler) HealthCheck(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(domain.ResponseBody{Status: domain.Success, Data: ""})
 }
+
+// CreateTodo func
+func (hdl *HTTPHandler) CreateTodo(c *fiber.Ctx) error {
+	return nil
+}
+
+// UpdateTodo func
+func (hdl *HTTPHandler) UpdateTodo(c *fiber.Ctx) error {
+	return nil
+}
+
+// DeleteTodo func
+func (hdl *HTTPHandler) DeleteTodo(c *fiber.Ctx) error {
+	return nil
+}
+
+// GetTodo func
+func (hdl *HTTPHandler) GetTodo(c *fiber.Ctx) error {
+	return nil
+}
