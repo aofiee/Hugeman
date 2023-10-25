@@ -66,8 +66,12 @@ func (s *Service) GetTodo(condition domain.QueryTodoRequest) (*domain.TodoListRe
 			OrderBy: *condition.OrderBy,
 		}
 	} else {
+		asc := true
+		if condition.Asc != nil {
+			asc = *condition.Asc
+		}
 		condition.SortMethod = &domain.SortMethod{
-			Asc:     true,
+			Asc:     asc,
 			OrderBy: "ID",
 		}
 	}

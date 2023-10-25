@@ -15,11 +15,11 @@ type (
 
 	// QueryTodoRequest struct
 	QueryTodoRequest struct {
-		ID          *uuid.UUID `json:"id" validate:"omitempty,uuid4" form:"id" query:"id"`
-		Title       *string    `json:"title" validate:"required" form:"title" query:"title"`
-		Description *string    `json:"description" validate:"omitempty" form:"description" query:"description"`
+		ID          *uuid.UUID `json:"id" form:"id" query:"id"`
+		Title       *string    `json:"title" form:"title" query:"title"`
+		Description *string    `json:"description" form:"description" query:"description"`
+		Status      *string    `json:"status" validate:"omitempty,oneof=IN_PROGRESS COMPLETE" form:"status" query:"status"`
 
-		IDs        []uuid.UUID `json:"ids,omitempty" form:"ids" query:"ids"`
 		Limit      *int        `json:"limit,omitempty" form:"limit" query:"limit"`
 		Page       *int        `json:"page,omitempty" form:"page" query:"page"`
 		OrderBy    *string     `json:"order_by,omitempty" form:"order_by" query:"order_by"`

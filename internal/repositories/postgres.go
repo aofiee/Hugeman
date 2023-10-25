@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"hugeman/internal/core/domain"
+	"net/url"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -135,6 +136,9 @@ func (p *Postgres) condition(condition domain.QueryTodoRequest) map[string]inter
 	if condition.ID != nil {
 		expression["id"] = *condition.ID
 	}
+	if condition.Status != nil {
+		expression["status"] = *condition.Status
+	}
 	return expression
 }
 
@@ -216,5 +220,90 @@ func (p *Postgres) DeleteTodo(request domain.TodoRequest) (*domain.TodoResponse,
 
 // GetTodo func
 func (p *Postgres) GetTodo(condition domain.QueryTodoRequest) (*domain.TodoListResponse, error) {
-	return nil, nil
+	var (
+		todo  domain.Todo
+		todos []domain.Todo
+	)
+	cond := p.condition(condition)
+	tx := p.dbGorm.Where(cond)
+
+	if condition.Title != nil {
+		keyword, err := url.QueryUnescape(*condition.Title)
+		if err != nil {
+			logrus.Errorln(err)
+			return nil, err
+		}
+		tx = tx.Where("title ILIKE ? ", "%"+keyword+"%")
+	}
+	if condition.Description != nil {
+		keyword, err := url.QueryUnescape(*condition.Description)
+		if err != nil {
+			logrus.Errorln(err)
+			return nil, err
+		}
+		tx = tx.Where("description ILIKE ? ", "%"+keyword+"%")
+	}
+
+	var toatalItem int64
+	tx.Model(&todo).Count(&toatalItem)
+
+	if condition.ID == nil {
+		var order string
+		if condition.SortMethod.OrderBy != "" {
+			order = condition.SortMethod.OrderBy
+		} else {
+			order = "id"
+		}
+		if condition.SortMethod.Asc {
+			tx = tx.Order(order + " ASC")
+		} else {
+			tx = tx.Order(order + " DESC")
+		}
+		logrus.Info("order by ", condition.SortMethod.Asc)
+		tx = tx.Limit(condition.Pagination.Limit).Offset(condition.Pagination.Offset)
+	}
+
+	tx.Find(&todos)
+	if tx.Error != nil {
+		logrus.Errorln(tx.Error)
+		return nil, tx.Error
+	}
+	result := domain.TodoListResponse{
+		Todos: []domain.TodoResponse{},
+	}
+
+	result.CurrentPage = condition.Page
+	result.PerPage = &condition.Pagination.Limit
+	result.TotalItem = &toatalItem
+	for _, todo := range todos {
+		var (
+			decodingImage string
+			df            string
+		)
+		todo := todo
+		if todo.Image != nil {
+			dec, err := base64.StdEncoding.DecodeString(*todo.Image)
+			if err != nil {
+				logrus.Errorln(err)
+				return nil, err
+			}
+			decodingImage = string(dec)
+		}
+		if todo.Date != nil {
+			df = todo.Date.Format(layoutDateTimeRFC3339)
+		}
+		data := domain.TodoResponse{
+			ID:          todo.ID,
+			Title:       todo.Title,
+			Description: todo.Description,
+			Date:        &df,
+			Image:       &decodingImage,
+			Status:      todo.Status,
+			CreatedAt:   todo.CreatedAt,
+			UpdatedAt:   todo.UpdatedAt,
+			DeletedAt:   todo.DeletedAt,
+		}
+		result.Todos = append(result.Todos, data)
+	}
+	return &result, nil
 }
