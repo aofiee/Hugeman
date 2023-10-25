@@ -3,6 +3,8 @@ package services
 import (
 	"hugeman/internal/core/domain"
 	"hugeman/internal/core/ports"
+
+	"github.com/sirupsen/logrus"
 )
 
 // Service struct
@@ -19,7 +21,12 @@ func New(repo ports.Repository) *Service {
 
 // CreateTodo func
 func (s *Service) CreateTodo(request domain.TodoRequest) (*domain.TodoResponse, error) {
-	return s.repo.CreateTodo(request)
+	result, err := s.repo.CreateTodo(request)
+	if err != nil {
+		logrus.Errorln(err)
+		return nil, err
+	}
+	return result, nil
 }
 
 // UpdateTodo func
