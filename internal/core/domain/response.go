@@ -46,7 +46,7 @@ type (
 		ID          *uuid.UUID  `json:"id,omitempty" mapstructure:"id"`
 		Title       *string     `json:"title,omitempty" mapstructure:"title"`
 		Description *string     `json:"description,omitempty" mapstructure:"description"`
-		Date        *time.Time  `json:"date,omitempty" mapstructure:"date"`
+		Date        *string     `json:"date,omitempty" mapstructure:"date"`
 		Image       *string     `json:"image,omitempty" mapstructure:"image"`
 		Status      *TodoStatus `json:"status,omitempty" mapstructure:"status"`
 		CreatedAt   *time.Time  `json:"created_at,omitempty" mapstructure:"created_at"`

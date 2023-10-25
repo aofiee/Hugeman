@@ -6,11 +6,11 @@ type (
 	// TodoRequest struct
 	TodoRequest struct {
 		ID          *uuid.UUID  `json:"id" validate:"omitempty,uuid4" form:"id" query:"id"`
-		Title       *string     `json:"title" validate:"required" form:"title" query:"title"`
+		Title       *string     `json:"title" validate:"required,max=100" form:"title" query:"title"`
 		Description *string     `json:"description" validate:"omitempty" form:"description" query:"description"`
 		Date        *string     `json:"date" validate:"required" form:"date" query:"date"`
 		Image       *string     `json:"image" validate:"omitempty" form:"image" query:"image"`
-		Status      *TodoStatus `json:"status" validate:"omitempty" form:"status" query:"status"`
+		Status      *TodoStatus `json:"status" validate:"required,oneof=IN_PROGRESS COMPLETE" form:"status" query:"status"`
 	}
 
 	// QueryTodoRequest struct

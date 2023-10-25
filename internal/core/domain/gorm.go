@@ -41,9 +41,9 @@ type Todo struct {
 	Date        *time.Time      `gorm:"type:timestamp;not null;"`
 	Image       *string         `gorm:"type:text"`
 	Status      *TodoStatus     `gorm:"type:varchar(11);not null;"`
-	CreatedAt   *time.Time      `gorm:"type:timestamp;not null;"`
-	UpdatedAt   *time.Time      `gorm:"type:timestamp;not null;"`
-	DeletedAt   *gorm.DeletedAt `gorm:"type:timestamp;not null;"`
+	CreatedAt   *time.Time      `gorm:"type:timestamp"`
+	UpdatedAt   *time.Time      `gorm:"type:timestamp"`
+	DeletedAt   *gorm.DeletedAt `gorm:"type:timestamp"`
 }
 
 // TableName func

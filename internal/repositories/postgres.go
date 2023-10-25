@@ -1,7 +1,9 @@
 package repositories
 
 import (
+	"encoding/base64"
 	"hugeman/internal/core/domain"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -27,7 +29,42 @@ func NewPostgres(dbGorm *gorm.DB) *Postgres {
 
 // CreateTodo func
 func (p *Postgres) CreateTodo(request domain.TodoRequest) (*domain.TodoResponse, error) {
-	return nil, nil
+	var (
+		err           error
+		response      domain.TodoResponse
+		encodingImage string
+	)
+	if request.Image != nil {
+		encodingImage = base64.StdEncoding.EncodeToString([]byte(*request.Image))
+	}
+	todo := domain.Todo{
+		Title:       request.Title,
+		Description: request.Description,
+		Image:       &encodingImage,
+		Status:      request.Status,
+	}
+	if request.Date != nil {
+		_date, err := time.Parse(layoutDateTimeRFC3339, *request.Date)
+		if err != nil {
+			logrus.Errorln(err)
+			return &response, err
+		}
+		todo.Date = &_date
+	}
+	if err = p.dbGorm.Create(&todo).Error; err != nil {
+		logrus.Errorln(err)
+		return &response, err
+	}
+	df := todo.Date.Format(layoutDateTimeRFC3339)
+	response = domain.TodoResponse{
+		ID:          todo.ID,
+		Title:       todo.Title,
+		Description: todo.Description,
+		Date:        &df,
+		Image:       todo.Image,
+		Status:      todo.Status,
+	}
+	return &response, nil
 }
 
 // UpdateTodo func
