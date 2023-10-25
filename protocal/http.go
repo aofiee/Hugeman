@@ -11,7 +11,9 @@ import (
 	"os"
 	"os/signal"
 
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -27,7 +29,10 @@ func ServeHTTP() error {
 	flag.Parse()
 	configs.InitViper("./configs", cfg.ENV)
 	logrus.Info(configs.GetViper().Env)
-
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowHeaders: "Origin, Content-Type, Accept,Authorization",
+	}))
 	dbConGorm, err := gorm.ConnectToPostgreSQL(
 		configs.GetViper().Postgres.Host,
 		configs.GetViper().Postgres.Port,
@@ -56,6 +61,7 @@ func ServeHTTP() error {
 	postgresRepo := repositories.NewPostgres(dbConGorm.Postgres)
 	srv := services.New(postgresRepo)
 	hdl := handlers.New(srv, dbConGorm.Postgres)
+	app.Get("/swagger/*", swagger.HandlerDefault) // default
 	app.Get("/health", hdl.HealthCheck)
 
 	hugeman := app.Group("/v1/api")
