@@ -93,3 +93,8 @@ ok  	hugeman/internal/services	0.496s	coverage: 82.8% of statements
 └── tmp
     └── app
 ```
+
+### 9. Swagger
+```bash
+swag init -g cmd/api/main.go --output docs
+```
