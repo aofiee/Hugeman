@@ -95,6 +95,9 @@ ok  	hugeman/internal/services	0.496s	coverage: 82.8% of statements
 ```
 
 ### 9. Swagger
+
+http://localhost:9089/swagger/index.html
+
 ```bash
 swag init -g cmd/api/main.go --output docs
 ```
