@@ -1,4 +1,4 @@
-# Hugeman
+# Hugeman Test
 
 ## 1. pre-commit install
 ```bash
